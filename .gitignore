@@ -1,0 +1,63 @@
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment files
+.env
+.env.*
+
+# SQLite database
+*.sqlite3
+db.sqlite3
+
+# Virtual environment (Windows & Unix)
+venv/
+ENV/
+env/
+Include/
+Lib/
+Scripts/
+pyvenv.cfg
+
+# Python distribution/packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Django specific
+*.log
+local_settings.py
+staticfiles/
+media/
+
+# Certificate/key files (security)
+*.pem
+*.crt
+*.key
+
+# IDE/editor config files
+.vscode/
+.idea/
+*.swo
+*.swp
+
+# macOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+ehthumbs.db

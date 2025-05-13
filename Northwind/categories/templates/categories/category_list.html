@@ -1,0 +1,17 @@
+<!-- categories/templates/categories/category_list.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Categories</title>
+  </head>
+  <body>
+    <h1>Categories</h1>
+    <ul>
+      {% for category in categories %}
+      <li>
+        <h1>{{ category.CategoryName }}</h1>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

@@ -130,15 +130,3 @@ Northwind/
 The API is configured with CORS support for frontend applications running on:
 - http://localhost:5173
 - http://127.0.0.1:5173
-
-## License
-
-[Your License Here]
-
-## Contributors
-
-- [Your Name]
-
-## Acknowledgements
-
-- This project uses the Northwind database, a sample database originally created by Microsoft for Microsoft Access.

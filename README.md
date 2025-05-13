@@ -103,7 +103,6 @@ Northwind/
 ├── shippers/           # Shippers app
 ├── suppliers/          # Suppliers app
 ├── .env                # Environment variables
-├── db.sqlite3          # Local SQLite database (if used)
 └── manage.py           # Django management script
 ```
 

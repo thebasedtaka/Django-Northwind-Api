@@ -61,3 +61,6 @@ media/
 # Windows system files
 Thumbs.db
 ehthumbs.db
+
+# Aws Config
+credentail.json

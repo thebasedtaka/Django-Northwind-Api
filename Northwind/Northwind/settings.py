@@ -29,7 +29,12 @@ SECRET_KEY = 'django-insecure-dw1uo9lh@7ll@%f$s7yu)-wth+duj!&aby_h53o-we4h_aw4zp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+if not DEBUG:
+    # Add your Azure Web App URL here for production
+    # Example: your-northwind-app.azurewebsites.net
+    # You might also want to add '*' for testing in Azure initially, but remove for production.
+    ALLOWED_HOSTS.append('northwind-django-mp.azurewebsites.net')
 
 
 # Application definition
@@ -50,6 +55,8 @@ INSTALLED_APPS = [
     'regions',
     'shippers',
     'suppliers',
+    'dashboard',
+    'corsheaders'
 ]
 
 MIGRATION_MODULES = {
@@ -66,16 +73,16 @@ MIGRATION_MODULES = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
 
-ROOT_URLCONF = 'Northwind.urls'
+ROOT_URLCONF = 'Northwind.Northwind.urls'
 
 TEMPLATES = [
     {
@@ -93,11 +100,12 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Northwind.wsgi.application'
+WSGI_APPLICATION = 'Northwind.Northwind.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
 
 DATABASES = {
     'default': {   
@@ -109,13 +117,30 @@ DATABASES = {
         'PORT': os.getenv('AZURESQL_PORT'),
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
-            'authentication': 'ActiveDirectoryDefault',
+            #'authentication': 'ActiveDirectoryDefault',
             'encrypt': True,
             'trust_server_certificate': False,
-            'ssl': {'ca': r'C:\Users\Taka\Python\Django\tutorial-env\BaltimoreCyberTrustRoot.crt.pem'},
+            'ssl': {'ca': r'/app/BaltimoreCyberTrustRoot.crt.pem'},
         }         
     }  
 }
+'''
+DATABASES = {
+    'default': {   
+        'ENGINE': 'mssql',   
+        'NAME': os.getenv('AZURESQL_DATABASE'),   
+        'USER': os.getenv('AZURESQL_USER'),   
+        'PASSWORD': os.getenv('AZURESQL_PASSWORD'),   
+        'HOST': os.getenv('AZURESQL_HOSTNAME'),   
+        'PORT': os.getenv('AZURESQL_PORT'),
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+            'encrypt': True,
+            'trust_server_certificate': False,
+        }         
+    }  
+}
+'''
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -152,6 +177,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -162,3 +188,29 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
+
+DASHBOARD_CACHE_TIMEOUT = 300
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        #'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '1000/day'
+    }
+}
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

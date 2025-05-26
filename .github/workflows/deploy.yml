@@ -1,0 +1,41 @@
+name: Build and Deploy to Azure Web App
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AZURE_WEBAPP_NAME: ${{ secrets.APP_NAME }}
+  AZURE_RG_NAME: ${{ secrets.RESOURCE_GROUP }}
+  ACR_LOGIN_SERVER: ${{ secrets.ACR_LOGIN_SERVER }}
+  DOCKER_IMAGE_NAME: northwind-django
+  DOCKER_IMAGE_TAG: latest
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push Docker image to ACR
+        run: |
+          # Ensure Docker is logged into ACR first
+          az acr login --name $(echo ${{ env.ACR_LOGIN_SERVER }} | cut -d'.' -f1) # Extracts registry name (e.g., northwinddjango) from login server URL
+          docker build . -t $ACR_LOGIN_SERVER/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+          docker push $ACR_LOGIN_SERVER/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+
+      - name: Restart Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          resource-group: ${{ env.AZURE_RG_NAME }}
+          images: <span class="math-inline">\{\{ env\.ACR\_LOGIN\_SERVER \}\}/</span>{{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}

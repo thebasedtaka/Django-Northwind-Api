@@ -18,33 +18,40 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
+from django.conf import settings
+from django.conf.urls.static import static
+
+# Import all your ViewSets
 from categories.views import CategoryViewSet
 from customers.views import CustomerViewSet
-from employees.views import EmployeeViewSet
-from employees.views import TerritoryViewSet
-from employees.views import EmployeeTerritoryViewSet
+from employees.views import EmployeeViewSet, TerritoryViewSet, EmployeeTerritoryViewSet
 from orders.views import OrderViewSet, OrderDetailViewSet
 from products.views import ProductViewSet
 from regions.views import RegionViewSet
 from shippers.views import ShipperViewSet
 from suppliers.views import SupplierViewSet
+from dashboard.views import DashboardViewSet
 
 router = DefaultRouter()
-router.register(r"categories", CategoryViewSet)
-router.register(r"customers", CustomerViewSet)
-router.register(r"employees", EmployeeViewSet)
-router.register(r"territories", TerritoryViewSet)
-router.register(r"employeeterritories", EmployeeTerritoryViewSet)
-router.register(r"orders", OrderViewSet)
-router.register(r"orderdetails", OrderDetailViewSet)
-router.register(r"products", ProductViewSet)
-router.register(r"regions", RegionViewSet)
-router.register(r"shippers", ShipperViewSet)
-router.register(r"suppliers", SupplierViewSet)
 
-
+# Register all viewsets with explicit, unique basenames
+router.register(r"categories", CategoryViewSet, basename="category")
+router.register(r"customers", CustomerViewSet, basename="customer")
+router.register(r"employees", EmployeeViewSet, basename="employee")
+router.register(r"territories", TerritoryViewSet, basename="territory")
+router.register(r"employeeterritories", EmployeeTerritoryViewSet, basename="employeeterritory")
+router.register(r"orders", OrderViewSet, basename="order")
+router.register(r"orderdetails", OrderDetailViewSet, basename="orderdetail")
+router.register(r"products", ProductViewSet, basename="product")
+router.register(r"regions", RegionViewSet, basename="region")
+router.register(r"shippers", ShipperViewSet, basename="shipper")
+router.register(r"suppliers", SupplierViewSet, basename="supplier")
+router.register(r"dashboard", DashboardViewSet, basename="dashboard")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,13 @@
+.git
+.gitignore
+.venv/
+env/
+venv/
+__pycache__/
+*.pyc
+*.sqlite3
+.DS_Store
+.env # CRITICAL: Do not include sensitive env vars in image
+debug.log
+.vscode/
+node_modules/ # If you have a frontend build process

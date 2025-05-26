@@ -3,6 +3,7 @@ from .models import OrderDetail, Order
 from .serializers import OrderDetailSerializer, OrderSerializer
 
 class OrderViewSet(viewsets.ModelViewSet):
+    basename = 'order'
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 

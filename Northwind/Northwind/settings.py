@@ -29,12 +29,12 @@ SECRET_KEY = 'django-insecure-dw1uo9lh@7ll@%f$s7yu)-wth+duj!&aby_h53o-we4h_aw4zp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1, localhost').split(',')
 if not DEBUG:
     # Add your Azure Web App URL here for production
     # Example: your-northwind-app.azurewebsites.net
     # You might also want to add '*' for testing in Azure initially, but remove for production.
-    ALLOWED_HOSTS.append('northwind-django-mp.azurewebsites.net')
+    ALLOWED_HOSTS.append('northwind-django-mp-eeded6bzb6a6agen.uksouth-01.azurewebsites.net')
 
 
 # Application definition

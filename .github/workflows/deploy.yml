@@ -40,5 +40,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          resource-group: ${{ env.AZURE_RG_NAME }}
-          images: <span class="math-inline">\{\{ env\.ACR\_LOGIN\_SERVER \}\}/</span>{{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
+          resource-group-name: ${{ env.AZURE_RG_NAME }}
+          images: "${{ env.ACR_LOGIN_SERVER }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}"

@@ -29,12 +29,11 @@ SECRET_KEY = 'django-insecure-dw1uo9lh@7ll@%f$s7yu)-wth+duj!&aby_h53o-we4h_aw4zp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1, localhost').split(',')
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')]
 if not DEBUG:
-    # Add your Azure Web App URL here for production
-    # Example: your-northwind-app.azurewebsites.net
-    # You might also want to add '*' for testing in Azure initially, but remove for production.
-    ALLOWED_HOSTS.append('northwind-django-mp-eeded6bzb6a6agen.uksouth-01.azurewebsites.net')
+    prod_host = 'northwind-django-mp-eeded6bzb6a6agen.uksouth-01.azurewebsites.net'
+    if prod_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(prod_host)
 
 
 # Application definition
@@ -71,9 +70,9 @@ MIGRATION_MODULES = {
 }
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -185,10 +184,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
+    "https://localhost:5173",
+    "https://127.0.0.1:5173",
+    "https://127.0.0.1:8000",
+    "https://localhost:8000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "http://127.0.0.1:5174",
-    "https://white-rock-0ecf1790f.6.azurestaticapps.net"
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    "https://white-rock-0ecf1790f.6.azurestaticapps.net",
 ]
 
 DASHBOARD_CACHE_TIMEOUT = 300

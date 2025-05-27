@@ -1,0 +1,11 @@
+services:
+  northwind-backend:
+    image: northwind-django
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./northwind/.env
+    environment:
+      DJANGO_SETTINGS_MODULE: Northwind.Northwind.settings
+    volumes:
+      - ./BaltimoreCyberTrustRoot.crt.pem:/app/BaltimoreCyberTrustRoot.crt.pem
